@@ -11,7 +11,7 @@
   --bg:#faf8f3;--surface:#fff;--surface2:#f5f2eb;--border:#e0dbd0;
   --text:#2a2520;--muted:#7a7265;--accent:#5c3d2e;--accent2:#8b6144;
   --gold:#b8860b;--gold-light:#f0e6c8;--tag-bg:#ede8df;--serif:'Georgia','Times New Roman',serif;--sans:'Outfit','Inter',sans-serif;--max-prose:700px;--reader-pad:28px;
-  --radius:8px;--nav-h:52px;--bottom-h:60px;
+  --radius:8px;--nav-h:52px;--bottom-h:60px;--reader-fontsize:15px;
 }
 html,body{height:100%;overflow:hidden}
 body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font-size:15px;display:flex;flex-direction:column}
@@ -55,7 +55,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font
 .qa-text{font-size:14px;font-weight:500;flex:1;line-height:1.5;color:#3a2010}
 .qa-arr{font-size:14px;color:var(--muted);flex-shrink:0;transition:transform .2s;margin-top:2px}
 .qa-arr.open{transform:rotate(180deg)}
-.qa-a{display:none;padding:10px 14px 14px 54px;font-family:'EB Garamond',serif;font-size:15px;line-height:1.8;color:#2a3a2a;border-top:2px solid var(--border);background:#f0f5f0}
+.qa-a{display:none;padding:10px 14px 14px 54px;font-family:'EB Garamond',serif;font-size:var(--reader-fontsize);line-height:1.8;color:#2a3a2a;border-top:2px solid var(--border);background:#f0f5f0}
 .qa-a.show{display:block}
 .qa-nota{font-size:12px;color:var(--muted);margin-top:6px;font-style:italic}
 
@@ -63,7 +63,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font
 .tx-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;padding:14px}
 .tx-num{font-size:11px;font-weight:700;color:var(--gold);margin-bottom:4px}
 .tx-title{font-weight:600;font-size:14px;margin-bottom:6px;color:var(--accent)}
-.tx-body{font-family:'EB Garamond',serif;font-size:15px;line-height:1.8;color:#3a3530}
+.tx-body{font-family:'EB Garamond',serif;font-size:var(--reader-fontsize);line-height:1.8;color:#3a3530}
 .tx-nota{font-size:12px;color:var(--muted);margin-top:6px;font-style:italic}
 
 /* action bar */
@@ -147,9 +147,9 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font
 .av-book-body.collapsed{display:none}
 .av-item{border-top:1px solid var(--border);position:relative}
 .av-qa-q{padding:10px 12px;background:#fff8f0;font-size:13px;font-weight:500;color:#3a2010}
-.av-qa-a{padding:8px 12px 12px 12px;background:#f0f5f0;font-family:'EB Garamond',serif;font-size:14px;line-height:1.75;color:#2a3a2a;border-top:2px solid var(--border)}
+.av-qa-a{padding:8px 12px 12px 12px;background:#f0f5f0;font-family:'EB Garamond',serif;font-size:var(--reader-fontsize);line-height:1.75;color:#2a3a2a;border-top:2px solid var(--border)}
 .av-qa-num{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:3px}
-.av-tx{padding:10px 12px;background:var(--surface);font-family:'EB Garamond',serif;font-size:14px;line-height:1.75;color:#3a3530}
+.av-tx{padding:10px 12px;background:var(--surface);font-family:'EB Garamond',serif;font-size:var(--reader-fontsize);line-height:1.75;color:#3a3530}
 .av-tx-num{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:3px;font-family:var(--sans);text-transform:uppercase;letter-spacing:.05em}
 /* "parou aqui" marker */
 .av-stop-btn{position:absolute;top:6px;right:8px;background:none;border:none;cursor:pointer;font-size:11px;color:var(--muted);opacity:0;transition:opacity .15s;padding:2px 6px;border-radius:4px;font-family:var(--sans)}
@@ -2392,7 +2392,15 @@ function persist(){
     const d=JSON.parse(localStorage.getItem('ese_app')||'{}');
     S.aulas=d.aulas||[]; S.planos=d.planos||[]; S.temas=d.temas||[]; S.aulasRecebidas=d.aulasRecebidas||[];
   }catch(e){}
+  try{const fs=localStorage.getItem('ese_fontsize');if(fs)document.documentElement.style.setProperty('--reader-fontsize',fs+'px');}catch(e){}
 })();
+let _curFontSize=parseInt(localStorage.getItem('ese_fontsize')||'15');
+function changeFontSize(delta){
+  _curFontSize=Math.min(26,Math.max(12,_curFontSize+delta));
+  document.documentElement.style.setProperty('--reader-fontsize',_curFontSize+'px');
+  try{localStorage.setItem('ese_fontsize',_curFontSize);}catch(e){}
+  const el=document.getElementById('font-size-label');if(el)el.textContent=_curFontSize+'px';
+}
 
 function chips(){
   document.getElementById('ca').textContent=S.aulas.length;
@@ -2565,6 +2573,9 @@ function renderReader(){
       <button class="btn btn-ghost btn-sm" onclick="genPDFChapter()">🖨 PDF</button>
       <button class="btn btn-ghost btn-sm" onclick="openAddToAula('${ch.id}')">+ Aula</button>
       <button class="btn btn-ghost btn-sm font-toggle" id="font-toggle-btn" onclick="toggleFont()">Aa</button>
+      <button class="btn btn-ghost btn-sm" onclick="changeFontSize(-1)" title="Diminuir fonte">A−</button>
+      <span id="font-size-label" style="font-size:11px;color:var(--muted);align-self:center;min-width:28px;text-align:center">${_curFontSize}px</span>
+      <button class="btn btn-ghost btn-sm" onclick="changeFontSize(1)" title="Aumentar fonte">A+</button>
       <button class="btn btn-ghost btn-sm" onclick="copyText('${link}','Link copiado!')">🔗 Link</button>
     </div>
     ${items}
@@ -2886,10 +2897,12 @@ function _buildAulaBody(topics, aulaKey){
   groups.forEach((g,gi)=>{
     const cls=g.book.id;
     const secId='av-sec-'+gi;
+    const ttsId='tts-sec-'+gi;
     body+=`<div class="av-book-sec" id="${secId}">
       <div class="av-book-hd ${cls}" onclick="avToggleSec('${secId}')">
         <span>${g.book.short} &nbsp;›&nbsp; ${esc(g.ch.title)}</span>
         <span style="margin-left:auto;font-size:11px;opacity:.6">${g.items.length} item(ns)</span>
+        <button class="btn btn-sm" id="${ttsId}-btn" style="background:rgba(255,255,255,.2);color:inherit;border:none;font-size:11px;padding:3px 8px;border-radius:4px;margin-left:8px" onclick="event.stopPropagation();ttsToggleSec('${ttsId}')" title="Ouvir esta seção">🔊 Ouvir</button>
         <span class="av-arr">▾</span>
       </div>
       <div class="av-book-body" id="${secId}-body">`;
@@ -2952,7 +2965,77 @@ function avSetStop(e,stopKey,itemKey){
     });
   }
 }
-function viewAula(i){
+
+// ── TTS (Text to Speech) ──
+let _ttsActive=null;
+function ttsToggleSec(ttsId){
+  const btn=document.getElementById(ttsId+'-btn');
+  if(_ttsActive===ttsId){
+    window.speechSynthesis.cancel();
+    _ttsActive=null;
+    if(btn){btn.textContent='🔊 Ouvir';btn.style.opacity='1';}
+    return;
+  }
+  if(_ttsActive){
+    window.speechSynthesis.cancel();
+    const old=document.getElementById(_ttsActive+'-btn');
+    if(old){old.textContent='🔊 Ouvir';old.style.opacity='1';}
+  }
+  // collect text from this section
+  const secBody=document.getElementById(ttsId.replace('tts-','av-')+'-body');
+  if(!secBody)return;
+  const texts=[];
+  secBody.querySelectorAll('.av-qa-q,.av-qa-a,.av-tx').forEach(el=>{
+    const t=el.innerText||el.textContent||'';
+    if(t.trim()) texts.push(t.trim());
+  });
+  if(!texts.length){toast('Nenhum texto para ler.');return;}
+  _ttsActive=ttsId;
+  if(btn){btn.textContent='⏹ Parar';btn.style.opacity='1';}
+  const fullText=texts.join('. ');
+  const utt=new SpeechSynthesisUtterance(fullText);
+  utt.lang='pt-BR';
+  utt.rate=0.92;
+  utt.onend=()=>{
+    _ttsActive=null;
+    if(btn){btn.textContent='🔊 Ouvir';btn.style.opacity='1';}
+  };
+  utt.onerror=()=>{
+    _ttsActive=null;
+    if(btn){btn.textContent='🔊 Ouvir';btn.style.opacity='1';}
+  };
+  window.speechSynthesis.speak(utt);
+}
+
+// ── Anotações por aula ──
+function getAulaNote(aulaKey){
+  try{return localStorage.getItem('note_'+aulaKey)||'';}catch(e){return '';}
+}
+function saveAulaNote(aulaKey,val){
+  try{localStorage.setItem('note_'+aulaKey,val);}catch(e){}
+}
+function renderNoteLinks(text){
+  return text.replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener" style="color:var(--gold);word-break:break-all">$1</a>');
+}
+function aulaNoteSave(aulaKey){
+  const ta=document.getElementById('aula-note-ta');
+  if(!ta)return;
+  saveAulaNote(aulaKey,ta.value);
+  toast('Anotação salva!');
+  const preview=document.getElementById('aula-note-preview');
+  if(preview) preview.innerHTML=renderNoteLinks(ta.value.replace(/\n/g,'<br>'));
+}
+function buildAulaNote(aulaKey){
+  const saved=getAulaNote(aulaKey);
+  return `<div style="margin-top:18px;border-top:1px solid var(--border);padding-top:14px">
+    <div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📝 Anotações</div>
+    <textarea id="aula-note-ta" rows="4" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--text);resize:vertical;min-height:80px" placeholder="Escreva suas anotações... Links serão clicáveis automaticamente.">${esc(saved)}</textarea>
+    <div style="display:flex;gap:8px;margin-top:6px;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-gold btn-sm" onclick="aulaNoteSave('${aulaKey}')">💾 Salvar anotação</button>
+      ${saved?`<div id="aula-note-preview" style="font-size:13px;color:var(--text);margin-top:6px;line-height:1.6;flex:1;min-width:200px">${renderNoteLinks(saved.replace(/\n/g,'<br>'))}</div>`:'<div id="aula-note-preview"></div>'}
+    </div>
+  </div>`;
+}
   const a=S.aulas[i];
   const aulaKey='aula_'+a.id;
   const stopKey='stop_'+aulaKey;
@@ -2965,6 +3048,7 @@ function viewAula(i){
     </div>`;
   }
   body+=_buildAulaBody(a.topics, aulaKey);
+  body+=buildAulaNote(aulaKey);
   body+=`<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
     <button class="btn btn-ghost btn-sm" onclick="genPDFAula(${i})">🖨 PDF</button>
     <button class="btn btn-ghost btn-sm" onclick="shareAula(${i})">🔗 Compartilhar</button>
