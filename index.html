@@ -2996,7 +2996,7 @@ function shareAula(i){
   const a=S.aulas[i];
   const payload={t:'a',n:a.name,d:a.date||'',k:a.topics};
   const url=window.location.href.split('#')[0]+'#S/'+_encode(payload);
-  copyText(url,'Link da aula copiado!');
+  shortenAndCopy(url,'Link da aula copiado!');
 }
 
 // ══════════════════════════════════════════
@@ -3091,7 +3091,7 @@ function sharePlano(i){
   const aulas=p.aulaIds.map(id=>S.aulas.find(a=>a.id===id)).filter(Boolean);
   const payload={t:'p',n:p.name,d:p.date||'',a:aulas.map(a=>({n:a.name,d:a.date||'',k:a.topics}))};
   const url=window.location.href.split('#')[0]+'#S/'+_encode(payload);
-  copyText(url,'Link do plano copiado!');
+  shortenAndCopy(url,'Link do plano copiado!');
 }
 
 // ══════════════════════════════════════════
@@ -3176,6 +3176,21 @@ function closeModal(e){
 // ══════════════════════════════════════════
 // SHARE / DEEP LINK
 // ══════════════════════════════════════════
+async function shortenAndCopy(url, msg){
+  toast('Encurtando link...');
+  try{
+    const res=await fetch('https://tinyurl.com/api-create.php?url='+encodeURIComponent(url));
+    if(!res.ok) throw new Error();
+    const short=await res.text();
+    if(short.startsWith('https://tinyurl.com/')){
+      copyText(short, msg);
+    } else {
+      copyText(url, msg+' (link original)');
+    }
+  } catch(e){
+    copyText(url, msg+' (link original)');
+  }
+}
 function copyText(url, msg){
   navigator.clipboard.writeText(url).then(()=>toast(msg)).catch(()=>{prompt('Copie o link:',url);});
 }
