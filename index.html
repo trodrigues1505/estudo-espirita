@@ -2574,7 +2574,7 @@ function renderReader(){
       <button class="btn btn-ghost btn-sm" onclick="openAddToAula('${ch.id}')">+ Aula</button>
       <button class="btn btn-ghost btn-sm font-toggle" id="font-toggle-btn" onclick="toggleFont()">Aa</button>
       <button class="btn btn-ghost btn-sm" onclick="changeFontSize(-1)" title="Diminuir fonte">A−</button>
-      <span id="font-size-label" style="font-size:11px;color:var(--muted);align-self:center;min-width:28px;text-align:center">${_curFontSize}px</span>
+      <span id="font-size-label" style="font-size:11px;color:var(--muted);align-self:center;min-width:28px;text-align:center"></span>
       <button class="btn btn-ghost btn-sm" onclick="changeFontSize(1)" title="Aumentar fonte">A+</button>
       <button class="btn btn-ghost btn-sm" onclick="copyText('${link}','Link copiado!')">🔗 Link</button>
     </div>
@@ -3036,6 +3036,7 @@ function buildAulaNote(aulaKey){
     </div>
   </div>`;
 }
+function viewAula(i){
   const a=S.aulas[i];
   const aulaKey='aula_'+a.id;
   const stopKey='stop_'+aulaKey;
@@ -3334,6 +3335,8 @@ function handleHash(){
 
 function init(){
   renderSB();renderMain();chips();
+  // update font size label after render
+  setTimeout(()=>{const el=document.getElementById('font-size-label');if(el)el.textContent=_curFontSize+'px';},0);
 }
 
 window.addEventListener('hashchange',handleHash);
