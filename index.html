@@ -146,7 +146,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font
 .av-book-body{display:block;transition:none}
 .av-book-body.collapsed{display:none}
 .av-item{border-top:1px solid var(--border);position:relative}
-.av-qa-q{padding:10px 12px;background:#fff8f0;font-size:13px;font-weight:500;color:#3a2010}
+.av-qa-q{padding:10px 12px;background:#fff8f0;font-size:var(--reader-fontsize);font-weight:500;color:#3a2010}
 .av-qa-a{padding:8px 12px 12px 12px;background:#f0f5f0;font-family:'EB Garamond',serif;font-size:var(--reader-fontsize);line-height:1.75;color:#2a3a2a;border-top:2px solid var(--border)}
 .av-qa-num{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:3px}
 .av-tx{padding:10px 12px;background:var(--surface);font-family:'EB Garamond',serif;font-size:var(--reader-fontsize);line-height:1.75;color:#3a3530}
@@ -247,15 +247,15 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font
 .qa-q{display:grid;grid-template-columns:40px 1fr 18px;align-items:start;padding:14px var(--reader-pad) 10px;cursor:pointer;transition:background .15s}
 .qa-q:hover{background:color-mix(in srgb,var(--gold) 5%,transparent)}
 .qa-num{font-size:10px;font-weight:700;color:var(--gold);padding-top:4px;font-family:var(--sans);letter-spacing:.02em}
-.qa-text{font-size:14.5px;line-height:1.75;color:var(--text);font-family:var(--serif)}
+.qa-text{font-size:var(--reader-fontsize);line-height:1.75;color:var(--text);font-family:var(--serif)}
 .qa-arr{font-size:11px;color:var(--muted);padding-top:5px;transition:transform .2s;text-align:right}
-.qa-a{display:none;margin:0 var(--reader-pad) 14px calc(var(--reader-pad) + 40px);font-size:14px;line-height:1.8;color:var(--text);font-family:var(--serif);border-left:3px solid var(--gold);padding:10px 14px;background:color-mix(in srgb,var(--gold) 7%,transparent);border-radius:0 6px 6px 0}
+.qa-a{display:none;margin:0 var(--reader-pad) 14px calc(var(--reader-pad) + 40px);font-size:var(--reader-fontsize);line-height:1.8;color:var(--text);font-family:var(--serif);border-left:3px solid var(--gold);padding:10px 14px;background:color-mix(in srgb,var(--gold) 7%,transparent);border-radius:0 6px 6px 0}
 .qa-a.show{display:block}
 
 /* ── TX items redesign ── */
 .tx-item{padding:14px var(--reader-pad) 8px;border-bottom:1px solid var(--border)}
 .tx-num{font-size:9.5px;font-weight:700;color:var(--muted);margin-bottom:6px;font-family:var(--sans);letter-spacing:.06em;text-transform:uppercase}
-.tx-body{font-size:14.5px;line-height:1.85;color:var(--text);font-family:var(--serif);text-align:justify;hyphens:auto}
+.tx-body{font-size:var(--reader-fontsize);line-height:1.85;color:var(--text);font-family:var(--serif);text-align:justify;hyphens:auto}
 .tx-nota{font-size:11.5px;color:var(--muted);margin-top:8px;font-style:italic;font-family:var(--serif)}
 
 /* ── Front matter ── */
@@ -283,7 +283,8 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font
 /* ── Font toggle button ── */
 .font-toggle{font-family:var(--serif);font-size:13px}
 
-/* ── Btn-xs ── */
+/* ── Footer credit ── */
+#dev-footer{text-align:center;font-size:10px;color:rgba(245,230,200,.45);padding:2px 0 1px;font-family:var(--sans);letter-spacing:.02em;pointer-events:none;flex-shrink:0}
 .btn-xs{padding:3px 8px;font-size:11px;border-radius:6px}
 .item-actions{display:flex;gap:4px;padding:4px var(--reader-pad) 6px;opacity:0;transition:opacity .15s}
 .qa-item:hover .item-actions,.tx-item:hover .item-actions,.obs-item:hover .item-actions{opacity:1}
@@ -301,7 +302,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font
 
 <div id="top-nav">
   <button id="sb-toggle" onclick="toggleSidebar()">☰</button>
-  <span class="logo">✦ Estudo Espírita</span>
+  <span class="logo">✦ Fraternidade Amor e Caridade<span style="font-size:10px;font-weight:400;opacity:0.5;margin-left:10px;letter-spacing:0.3px;font-family:'Outfit',sans-serif;vertical-align:middle">Desenvolvido por Thiago Rodrigues</span></span>
   <button class="nav-tab active" onclick="gv('reader')">Leitura</button>
   <button class="nav-tab" onclick="gv('search')">Pesquisa</button>
   <button class="nav-tab" onclick="gv('aulas')">Aulas<span class="chip" id="ca">0</span></button>
@@ -323,6 +324,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font
     <button class="bn-tab" onclick="gv('planos')"><span class="bn-icon">📅</span>Planos</button>
     <button class="bn-tab" onclick="gv('temas')"><span class="bn-icon">🏷</span>Temas</button>
   </div>
+  <div id="dev-footer">Desenvolvido por Thiago Rodrigues</div>
 </div>
 
 <button class="scroll-top" id="scroll-top-btn" onclick="document.getElementById('main').scrollTo({top:0,behavior:'smooth'})">↑</button>
@@ -336,6 +338,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font
   </div>
 </div>
 <div id="toast"></div>
+<div style="display:none" id="dev-credit">Desenvolvido por Thiago Rodrigues</div>
 
 <script>
 // ══════════════════════════════════════════
@@ -2399,7 +2402,7 @@ function changeFontSize(delta){
   _curFontSize=Math.min(26,Math.max(12,_curFontSize+delta));
   document.documentElement.style.setProperty('--reader-fontsize',_curFontSize+'px');
   try{localStorage.setItem('ese_fontsize',_curFontSize);}catch(e){}
-  const el=document.getElementById('font-size-label');if(el)el.textContent=_curFontSize+'px';
+  document.querySelectorAll('#font-size-label').forEach(el=>el.textContent=_curFontSize+'px');
 }
 
 function chips(){
@@ -2481,6 +2484,7 @@ function renderMain(){
   else if(S.view==='aulas') m.innerHTML=renderAulas();
   else if(S.view==='planos') m.innerHTML=renderPlanos();
   else if(S.view==='temas') m.innerHTML=renderTemas();
+  document.querySelectorAll('#font-size-label').forEach(el=>el.textContent=_curFontSize+'px');
 }
 
 // ══════════════════════════════════════════
@@ -2751,7 +2755,9 @@ function renderAulas(){
     :'<div class="empty">Nenhuma aula recebida ainda.<br><span style="font-size:12px">Aulas compartilhadas por link aparecem aqui.</span></div>';
   const recCount=S.aulasRecebidas?S.aulasRecebidas.length:0;
   return `<div class="pg-wrap">
-    <h2 class="pg-title">Aulas</h2>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0">
+      <h2 class="pg-title" style="margin-bottom:0">Aulas</h2>
+    </div>
     <div class="tabs">
       <div class="tab active" onclick="swTab(0)">Nova Aula</div>
       <div class="tab" onclick="swTab(1)">Minhas Aulas (${S.aulas.length})</div>
@@ -2784,6 +2790,9 @@ function renderAulas(){
     </div>
     <div class="tp" id="tp1"><div class="card-list">${list}</div></div>
     <div class="tp" id="tp2"><div class="card-list">${recList}</div></div>
+    <div style="text-align:center;padding:18px 0 4px;font-size:11px;color:var(--muted);opacity:0.7">
+      Desenvolvido por Thiago Rodrigues
+    </div>
   </div>`;
 }
 function swTab(i){
@@ -2903,6 +2912,11 @@ function _buildAulaBody(topics, aulaKey){
         <span>${g.book.short} &nbsp;›&nbsp; ${esc(g.ch.title)}</span>
         <span style="margin-left:auto;font-size:11px;opacity:.6">${g.items.length} item(ns)</span>
         <button class="btn btn-sm" id="${ttsId}-btn" style="background:rgba(255,255,255,.2);color:inherit;border:none;font-size:11px;padding:3px 8px;border-radius:4px;margin-left:8px" onclick="event.stopPropagation();ttsToggleSec('${ttsId}')" title="Ouvir esta seção">🔊 Ouvir</button>
+        ${gi===0?`<span onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:3px;margin-left:8px">
+          <button onclick="changeFontSize(-1)" style="background:rgba(255,255,255,.2);color:inherit;border:none;font-size:11px;padding:2px 7px;border-radius:4px;cursor:pointer;font-family:var(--sans)" title="Diminuir fonte">A−</button>
+          <span id="font-size-label" style="font-size:10px;opacity:.7;min-width:26px;text-align:center">${_curFontSize}px</span>
+          <button onclick="changeFontSize(1)" style="background:rgba(255,255,255,.2);color:inherit;border:none;font-size:11px;padding:2px 7px;border-radius:4px;cursor:pointer;font-family:var(--sans)" title="Aumentar fonte">A+</button>
+        </span>`:''}
         <span class="av-arr">▾</span>
       </div>
       <div class="av-book-body" id="${secId}-body">`;
@@ -3041,7 +3055,7 @@ function viewAula(i){
   const aulaKey='aula_'+a.id;
   const stopKey='stop_'+aulaKey;
   const hasStop=!!localStorage.getItem(stopKey);
-  let body=`<p style="font-size:12px;color:var(--muted);margin-bottom:14px">${a.date?'Data: '+a.date+' · ':''} ${a.topics.length} tópico(s) — passe o mouse sobre um item para marcar onde parou</p>`;
+  let body=`<p style="font-size:12px;color:var(--muted);margin-bottom:12px">${a.date?'Data: '+a.date+' · ':''} ${a.topics.length} tópico(s) — passe o mouse sobre um item para marcar onde parou</p>`;
   if(hasStop){
     body+=`<div id="stop-banner" style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff8e6;border:1px solid #d4a843;border-radius:var(--radius);padding:8px 12px;margin-bottom:12px;font-size:13px;color:var(--accent)">
       <span>📍 Você tem um marcador salvo nesta aula.</span>
