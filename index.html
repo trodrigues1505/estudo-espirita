@@ -302,7 +302,13 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font
 
 <div id="top-nav">
   <button id="sb-toggle" onclick="toggleSidebar()">☰</button>
-  <span class="logo">✦ Fraternidade Amor e Caridade<span style="font-size:10px;font-weight:400;opacity:0.5;margin-left:10px;letter-spacing:0.3px;font-family:'Outfit',sans-serif;vertical-align:middle">Desenvolvido por Thiago Rodrigues</span></span>
+  <span class="logo" style="display:flex;flex-direction:column;justify-content:center;line-height:1.2">
+    <span style="display:flex;align-items:baseline;gap:6px">
+      <span>✦ Fraternidade Amor e Caridade</span>
+      <span style="font-size:10px;font-weight:400;opacity:0.55;font-family:'Outfit',sans-serif;white-space:nowrap">Estudo Espírita</span>
+    </span>
+    <span style="font-size:9px;font-weight:400;opacity:0.45;font-family:'Outfit',sans-serif;letter-spacing:0.3px">Desenvolvido por Thiago Rodrigues</span>
+  </span>
   <button class="nav-tab active" onclick="gv('reader')">Leitura</button>
   <button class="nav-tab" onclick="gv('search')">Pesquisa</button>
   <button class="nav-tab" onclick="gv('aulas')">Aulas<span class="chip" id="ca">0</span></button>
