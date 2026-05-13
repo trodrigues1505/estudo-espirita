@@ -645,6 +645,7 @@ function renderReader(){
       <span id="font-size-label" style="font-size:11px;color:var(--muted);align-self:center;min-width:28px;text-align:center"></span>
       <button class="btn btn-ghost btn-sm" onclick="changeFontSize(1)" title="Aumentar fonte">A+</button>
       <button class="btn btn-ghost btn-sm" onclick="copyText('${link}','Link copiado!')">🔗 Link</button>
+      <button class="btn btn-ghost btn-sm" id="reader-tts-btn" onclick="ttsToggleReader()">🔊 Ouvir</button>
     </div>
     ${items}
     <div style="height:40px"></div>
@@ -1051,6 +1052,42 @@ function ttsToggleSec(ttsId){
     _ttsActive=null;
     if(btn){btn.textContent='🔊 Ouvir';btn.style.opacity='1';}
   };
+  window.speechSynthesis.speak(utt);
+}
+
+
+// ── TTS no Leitor ──
+let _ttsReaderActive=false;
+function ttsToggleReader(){
+  const btn=document.getElementById('reader-tts-btn');
+  if(_ttsReaderActive){
+    window.speechSynthesis.cancel();
+    _ttsReaderActive=false;
+    if(btn){btn.textContent='🔊 Ouvir';}
+    return;
+  }
+  // Collect all visible text from the reader
+  const reader=document.getElementById('main');
+  if(!reader) return;
+  const texts=[];
+  reader.querySelectorAll('.r-p,.r-section-title,.tx-body,.epigraph').forEach(el=>{
+    const t=(el.innerText||el.textContent||'').trim();
+    if(t) texts.push(t);
+  });
+  if(!texts.length){toast('Nenhum texto para ler.');return;}
+  _ttsReaderActive=true;
+  if(btn){btn.textContent='⏹ Parar';}
+  const utt=new SpeechSynthesisUtterance(texts.join('. '));
+  utt.lang='pt-BR'; utt.rate=0.92;
+  utt.onend=()=>{
+    _ttsReaderActive=false;
+    if(btn){btn.textContent='🔊 Ouvir';}
+  };
+  utt.onerror=()=>{
+    _ttsReaderActive=false;
+    if(btn){btn.textContent='🔊 Ouvir';}
+  };
+  window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utt);
 }
 
